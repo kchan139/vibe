@@ -13,11 +13,14 @@ Usage:
 
 Examples:
 1. Scan a directory with default output (file_ingest.txt):
+   ```bash
    ./ingest.py ~/my_project/src
+   ```
 
 2. Specify a custom output file:
+   ```bash
    ./ingest.py ~/my_project/src -o project_contents.txt
-
+   ```
 Options:
   -h, --help    Show help message
   -o OUTPUT     Specify output file (default: file_ingest.txt)
