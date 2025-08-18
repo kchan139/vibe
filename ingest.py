@@ -4,10 +4,65 @@ from datetime import datetime
 import argparse
 
 # Default output file path
-OUTPUT_FILE = "file_ingest.txt"
+OUTPUT_FILE = "file_ingest.khoa"
 
 # Default directories to ignore
-DEFAULT_IGNORE_DIRS = {".git", "node_modules", "venv", "__pycache__", ".env"}
+DEFAULT_IGNORE_DIRS = {
+    # VCS
+    ".git",
+    ".svn",
+    ".hg",
+    # Python
+    "__pycache__",
+    "venv",
+    ".venv",
+    "env",
+    ".env",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".tox",
+    ".coverage",
+    "build",
+    "dist",
+    # JS / Node
+    "node_modules",
+    "bower_components",
+    ".parcel-cache",
+    ".next",
+    ".nuxt",
+    ".turbo",
+    "coverage",
+    # Java / JVM
+    "target",
+    "out",
+    "build",
+    # C / C++ / Go
+    "bin",
+    "obj",
+    ".gradle",
+    ".idea",
+    ".vscode",
+    # OS / Editors
+    ".DS_Store",
+    "Thumbs.db",
+    ".vs",
+    ".classpath",
+    ".project",
+    ".settings",
+    # Secrets
+    "secret",
+    "secrets",
+    "secrets.*",
+    "secret.*",
+    # Containers
+    ".docker",
+    ".devcontainer",
+    # Logs / Temp
+    "logs",
+    "tmp",
+    "temp",
+    ".cache",
+}
 
 
 def scan_files(directories, output_file=OUTPUT_FILE, ignore_dirs=None):
