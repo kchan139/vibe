@@ -4,7 +4,7 @@ from datetime import datetime
 import argparse
 
 # Default output file path
-OUTPUT_FILE = "file_ingest.khoa"
+OUTPUT_FILE = "file_ingest.txt"
 
 # Default directories to ignore
 DEFAULT_IGNORE_DIRS = {
