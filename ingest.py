@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import os
-from datetime import datetime
+import fnmatch
 import argparse
+from datetime import datetime
 
 # Default output file path
 OUTPUT_FILE = "file_ingest.txt"
@@ -62,6 +63,37 @@ DEFAULT_IGNORE_DIRS = {
     "tmp",
     "temp",
     ".cache",
+    # Terraform
+    ".terraform/",
+    "*.tfstate",
+    "*.tfstate.*",
+    "crash.log",
+    "crash.*.log",
+    "*.tfvars",
+    "*.tfvars.json",
+    "override.tf",
+    "override.tf.json",
+    "*_override.tf",
+    "*_override.tf.json",
+    ".terraform.tfstate.lock.info",
+    ".terraformrc",
+    "terraform.rc",
+    # Ansible
+    "ansible/roles/*",
+    "!ansible/roles/project-*",
+    "!ansible/roles/README.md",
+    # Misc
+    ".*",
+    "!*.gitignore",
+    "!.placeholder",
+    "*.log",
+    "*.py[co]",
+    "*~",
+    "*.swp",
+    "*.retry",
+    "sandbox",
+    ".env",
+    "inventory.ini",
 }
 
 
@@ -152,24 +184,30 @@ def should_ignore(name, exact_ignores, pattern_ignores):
     """
     Check if a file or directory name should be ignored.
 
-    Args:
-        name (str): Name of the file or directory
-        exact_ignores (set): Set of exact names to ignore
-        pattern_ignores (set): Set of pattern names with wildcards to ignore
-
-    Returns:
-        bool: True if the name should be ignored, False otherwise
+    Supports:
+      - exact matches
+      - glob patterns (*.ext, prefix*, *middle*, etc.)
+      - negated patterns (!pattern) which override ignores
     """
-    # Check exact matches
-    if name in exact_ignores:
+    # Extract negated patterns (things we force to include)
+    negated_patterns = [p[1:] for p in exact_ignores if p.startswith("!")]
+    negated_patterns += [p[1:] for p in pattern_ignores if p.startswith("!")]
+
+    # Check negations first (override)
+    for pattern in negated_patterns:
+        if fnmatch.fnmatch(name, pattern):
+            return False
+
+    # Exact match (non-negated)
+    if name in exact_ignores and not name.startswith("!"):
         return True
 
-    # Check pattern matches
+    # Glob pattern matches
     for pattern in pattern_ignores:
-        if "*" in pattern:
-            prefix = pattern.split("*")[0]
-            if name.startswith(prefix):
-                return True
+        if pattern.startswith("!"):  # skip negations (already checked)
+            continue
+        if fnmatch.fnmatch(name, pattern):
+            return True
 
     return False
 
