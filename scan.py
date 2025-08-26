@@ -3,100 +3,10 @@ import os
 import fnmatch
 import argparse
 from datetime import datetime
+from ignore import DEFAULT_IGNORE_DIRS
 
 # Default output file path
-OUTPUT_FILE = "file_ingest.txt"
-
-# Default directories to ignore
-DEFAULT_IGNORE_DIRS = {
-    # VCS
-    ".git",
-    ".svn",
-    ".hg",
-    # Python
-    "__pycache__",
-    "venv",
-    ".venv",
-    "env",
-    ".env",
-    ".mypy_cache",
-    ".pytest_cache",
-    ".tox",
-    ".coverage",
-    "build",
-    "dist",
-    # JS / Node
-    "node_modules",
-    "bower_components",
-    ".parcel-cache",
-    ".next",
-    ".nuxt",
-    ".turbo",
-    "coverage",
-    # Java / JVM
-    "target",
-    "out",
-    "build",
-    # C / C++ / Go
-    "bin",
-    "obj",
-    ".gradle",
-    ".idea",
-    ".vscode",
-    # OS / Editors
-    ".DS_Store",
-    "Thumbs.db",
-    ".vs",
-    ".classpath",
-    ".project",
-    ".settings",
-    # Secrets
-    "secret",
-    "secrets",
-    "secrets.*",
-    "secret.*",
-    # Containers
-    ".docker",
-    ".devcontainer",
-    # Logs / Temp
-    "logs",
-    "tmp",
-    "temp",
-    ".cache",
-    # Terraform
-    ".terraform/",
-    "*.tfstate",
-    "*.tfstate.*",
-    "crash.log",
-    "crash.*.log",
-    "*.tfvars",
-    "*.tfvars.json",
-    "override.tf",
-    "override.tf.json",
-    "*_override.tf",
-    "*_override.tf.json",
-    ".terraform.tfstate.lock.info",
-    ".terraformrc",
-    "terraform.rc",
-    # Ansible
-    "ansible/roles/*",
-    "!ansible/roles/project-*",
-    "!ansible/roles/README.md",
-    # Misc
-    ".*",
-    "!*.gitignore",
-    "!.placeholder",
-    "!.github",
-    "!.gitlab-ci.yml",
-    "*.log",
-    "*.py[co]",
-    "*~",
-    "*.swp",
-    "*.retry",
-    "sandbox",
-    ".env",
-    "inventory.ini",
-}
+OUTPUT_FILE = "scanned_contents.txt"
 
 
 def scan_files(directories, output_file=OUTPUT_FILE, ignore_dirs=None):
@@ -236,9 +146,9 @@ def is_binary_file(file_path):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Ingest files from a directory into a text file."
+        description="Scan files from a directory into a text file."
     )
-    parser.add_argument("directory", help="Directory to scan and ingest files from")
+    parser.add_argument("directory", help="Directory to scan files from")
     parser.add_argument(
         "-o",
         "--output",
@@ -249,7 +159,7 @@ if __name__ == "__main__":
         "--ignore",
         nargs="*",
         default=list(DEFAULT_IGNORE_DIRS),
-        help=f'Directories to ignore (default: {" ".join(sorted(DEFAULT_IGNORE_DIRS))})',
+        help=f'Ignore patterns (default: {" ".join(sorted(DEFAULT_IGNORE_DIRS))})',
     )
 
     args = parser.parse_args()
