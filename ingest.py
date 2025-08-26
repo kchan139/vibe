@@ -86,6 +86,8 @@ DEFAULT_IGNORE_DIRS = {
     ".*",
     "!*.gitignore",
     "!.placeholder",
+    "!.github",
+    "!.gitlab-ci.yml",
     "*.log",
     "*.py[co]",
     "*~",
