@@ -1,6 +1,5 @@
 # Quick Scanner
 
-Description:  
 A script to recursively scan a directory and save the contents of all text files (excluding binaries and files >1MB) into a single output file.
 
 ## Installation
@@ -28,7 +27,7 @@ A script to recursively scan a directory and save the contents of all text files
 ## Usage
 
    ```bash
-   scan [TARGET_DIRECTORY] [-o OUTPUT_FILE]
+   scan [TARGET_DIRECTORY] [-o OUTPUT_FILE] [--ignore PATTERN]
    ```
 
 ## Examples
@@ -45,14 +44,22 @@ A script to recursively scan a directory and save the contents of all text files
    scan ~/my_project/src -o project_contents.txt
    ```
 
+3. Use custom ignore patterns:
+
+   ```bash
+   scan ~/my_project/src --ignore "*.pyc" "test_*" "__pycache__"
+   ```
+
 ## Options
 
 * `-h, --help`    Show help message
 * `-o OUTPUT`     Specify output file (default: `scanned_contents.txt`)
+* `--ignore PATTERN`  Additional ignore patterns
 
 ## Notes
 
-* Ignore patterns are specified in `ignore.py`.
+* Default ignore patterns are specified in `ignore.py`.
 * Skips binary files and files larger than 1MB.
 * Output includes relative file paths and contents.
 * Errors (e.g., unreadable files) are printed to the console.
+* Supports glob patterns (`*.ext`, `prefix*`, `*middle*`) and negated patterns (`!pattern`).

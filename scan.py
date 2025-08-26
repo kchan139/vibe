@@ -6,20 +6,39 @@ from datetime import datetime
 from ignore import DEFAULT_IGNORE_DIRS
 
 # Default output file path
-OUTPUT_FILE = "scanned_contents.txt"
+# OUTPUT_FILE = "scanned_contents.txt"
 
 
-def scan_files(directories, output_file=OUTPUT_FILE, ignore_dirs=None):
+def generate_output_filename(directory):
+    """
+    Generate output filename based on directory name and current datetime.
+
+    Args:
+        directory (str): Directory path being scanned
+
+    Returns:
+        str: Generated filename in format "dirname_DD-MM-YYYY.txt"
+    """
+    dir_name = os.path.basename(os.path.abspath(directory))
+    timestamp = datetime.now().strftime("%d-%m-%Y")
+    return f"{dir_name}_{timestamp}.txt"
+
+
+def scan_files(directories, output_file=None, ignore_dirs=None):
     """
     Scan specified directories and write the contents of all files to a text file.
 
     Args:
         directories (list): List of directory paths to scan
-        output_file (str): Path to the output text file
+        output_file (str): Path to the output text file (None for auto-generated)
         ignore_dirs (set): Set of directory names to ignore
     """
     if ignore_dirs is None:
         ignore_dirs = DEFAULT_IGNORE_DIRS
+
+    # Auto-generate output filename if not provided
+    if output_file is None:
+        output_file = generate_output_filename(directories[0])
 
     # Split ignore patterns into exact matches and patterns with wildcards
     exact_ignores = set()
@@ -152,8 +171,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "-o",
         "--output",
-        default=OUTPUT_FILE,
-        help=f"Output file path (default: {OUTPUT_FILE})",
+        default=None,
+        help=f"Output file path (default: auto-generated from directory name + timestamp)",
     )
     parser.add_argument(
         "--ignore",
