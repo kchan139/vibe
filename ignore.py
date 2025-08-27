@@ -59,7 +59,7 @@ DEFAULT_IGNORE_DIRS = {
     "temp",
     ".cache",
     # Terraform
-    ".terraform/",
+    ".terraform",
     "*.tfstate",
     "*.tfstate.*",
     "crash.log",
